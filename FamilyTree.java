@@ -1,8 +1,11 @@
 
 import java.util.List;
+import java.io.Serializable;
 import java.util.ArrayList;
 /**Класс генеологического древа семьи*/
-public class FamilyTree {
+public class FamilyTree implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     private List<Person> people;
 
     public FamilyTree() {
@@ -25,5 +28,9 @@ public class FamilyTree {
         }
         return null;
     }
+
+    public List<Person> getPeople() {
+        return people;
+        }
 
 }

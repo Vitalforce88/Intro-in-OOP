@@ -1,8 +1,10 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**Класс описывающий члена семьи.*/
-public class Person {
+public class Person implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String name;
     private int birthYear;
     private Person mother;
@@ -14,8 +16,7 @@ public class Person {
         this.birthYear = birthYear;
         this.children = new ArrayList<>();
     }
-    public Person(){};
-
+    
     public String getName() {
         return name;
     }
