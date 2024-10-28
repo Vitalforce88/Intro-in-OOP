@@ -1,7 +1,7 @@
 
 import java.util.List;
 import java.util.ArrayList;
-
+/**Класс генеологического древа семьи*/
 public class FamilyTree {
     private List<Person> people;
 

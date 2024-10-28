@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
+/**Класс описывающий члена семьи.*/
 public class Person {
     private String name;
     private int birthYear;
