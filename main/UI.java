@@ -1,10 +1,14 @@
+package main;
 
+import model.familyTree;
+import model.Person;
+import service.fileOperations;
+import service.FileOperationsImpl;
 import java.io.IOException;
-import java.util.*;
 
 public class UI {
     public static void main(String[] args) {
-        FamilyTree familyTree = new FamilyTree();
+        familyTree familyTree = new familyTree();
         // Создаем людей
         Person john = new Person("John", 1950);
         Person mary = new Person("Mary", 1955);
@@ -18,20 +22,30 @@ public class UI {
         familyTree.addPerson(john);
         familyTree.addPerson(mary);
         familyTree.addPerson(susan);
-
-        // Создаем объект для работы с файлами
-        FileOperations fileOps = new FileOperationsImpl();
-
+        // Сортируем по имени
+        System.out.println("Сортировка по имени:");
+        familyTree.sortByName();
+        for (Person person : familyTree) {
+            System.out.println(person.getName() + " - " +
+                    person.getBirthYear());
+        }
+        // Сортируем по дате рождения
+        System.out.println("\nСортировка по дате рождения:");
+        familyTree.sortByBirthYear();
+        for (Person person : familyTree) {
+            System.out.println(person.getName() + " - " +
+                    person.getBirthYear());
+        }
         // Сохраняем генеалогическое древо в файл
+        fileOperations fileOps = new FileOperationsImpl();
         try {
             fileOps.saveToFile(familyTree, "familyTree.dat");
-            System.out.println("Family tree saved to file.");
+            System.out.println("\nFamily tree saved to file.");
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         // Загружаем генеалогическое древо из файла
-        FamilyTree loadedFamilyTree = null;
+        familyTree loadedFamilyTree = null;
         try {
             loadedFamilyTree = fileOps.loadFromFile("familyTree.dat");
             System.out.println("Family tree loaded from file.");
@@ -40,12 +54,11 @@ public class UI {
         }
         // Проверяем, что древо загрузилось правильно
         if (loadedFamilyTree != null) {
-            for (Person person : loadedFamilyTree.getPeople()) {
-                System.out.println("Loaded person: " +
-                        person.getName() + ", born in " + person.getBirthYear());
+            System.out.println("\nLoaded persons:");
+            for (Person person : loadedFamilyTree) {
+                System.out.println(person.getName() + ", born in " +
+                        person.getBirthYear());
             }
         }
-
     }
-
 }
