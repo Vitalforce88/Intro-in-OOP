@@ -6,9 +6,9 @@ import service.fileOperations;
 import service.FileOperationsImpl;
 import java.io.IOException;
 
-public class UI {
+public class Main {
     public static void main(String[] args) {
-        familyTree familyTree = new familyTree();
+        familyTree<Person> familyTree = new familyTree<>();
         // Создаем людей
         Person john = new Person("John", 1950);
         Person mary = new Person("Mary", 1955);
@@ -19,9 +19,9 @@ public class UI {
         john.addChild(susan);
         mary.addChild(susan);
         // Добавляем людей в древо
-        familyTree.addPerson(john);
-        familyTree.addPerson(mary);
-        familyTree.addPerson(susan);
+        familyTree.addMember(john);
+        familyTree.addMember(mary);
+        familyTree.addMember(susan);
         // Сортируем по имени
         System.out.println("Сортировка по имени:");
         familyTree.sortByName();
@@ -37,7 +37,7 @@ public class UI {
                     person.getBirthYear());
         }
         // Сохраняем генеалогическое древо в файл
-        fileOperations fileOps = new FileOperationsImpl();
+        fileOperations<Person> fileOps = new FileOperationsImpl<>();
         try {
             fileOps.saveToFile(familyTree, "familyTree.dat");
             System.out.println("\nFamily tree saved to file.");
@@ -45,7 +45,7 @@ public class UI {
             e.printStackTrace();
         }
         // Загружаем генеалогическое древо из файла
-        familyTree loadedFamilyTree = null;
+        familyTree<Person> loadedFamilyTree = null;
         try {
             loadedFamilyTree = fileOps.loadFromFile("familyTree.dat");
             System.out.println("Family tree loaded from file.");
