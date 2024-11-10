@@ -2,6 +2,7 @@ package main;
 
 import model.familyTree;
 import model.Person;
+import presenter.CommandHandler;
 import presenter.TreePresenter;
 import service.FileOperationsImpl;
 import view.ConsoleTreeView;
@@ -12,7 +13,8 @@ public class Main {
         ConsoleTreeView view = new ConsoleTreeView();
         FileOperationsImpl<Person> fileOperations = new FileOperationsImpl<>();
         TreePresenter presenter = new TreePresenter(familyTree,
-                view, fileOperations);
-        presenter.handleUserInput();
+                view, view, view, fileOperations);
+        CommandHandler commandHandler = new CommandHandler(presenter, view);
+        commandHandler.handleUserInput();
     }
 }

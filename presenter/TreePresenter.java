@@ -3,98 +3,102 @@ package presenter;
 import model.familyTree;
 import model.Person;
 import service.fileOperations;
-import view.TreeView;
+import view.MessageView;
+import view.PersonView;
+import view.InputView;
 import java.io.IOException;
 
 public class TreePresenter {
     private familyTree<Person> familyTree;
-    private TreeView view;
+    private MessageView messageView;
+    private PersonView personView;
+    private InputView inputView;
     private fileOperations<Person> fileOperations;
 
-    public TreePresenter(familyTree<Person> familyTree, TreeView view, fileOperations<Person> fileOperations) {
+    public TreePresenter(familyTree<Person> familyTree, MessageView messageView, PersonView personView,
+            InputView inputView,
+            fileOperations<Person> fileOperations) {
         this.familyTree = familyTree;
-        this.view = view;
+        this.messageView = messageView;
+        this.personView = personView;
+        this.inputView = inputView;
         this.fileOperations = fileOperations;
-        this.view.setPresenter(this);
     }
 
     public void addPerson(String name, int birthYear) {
         Person person = new Person(name, birthYear);
         familyTree.addMember(person);
-        view.displayMessage("Person added: " + name);
+        messageView.displayMessage("Person added: " + name);
     }
 
     public void showAllPersons() {
-        view.displayPersons(familyTree.getMembers());
+        personView.displayPersons(familyTree.getMembers());
     }
 
     public void sortPersonsByName() {
         familyTree.sortByName();
-        view.displayMessage("Persons sorted by name:");
+        messageView.displayMessage("Persons sorted by name:");
         showAllPersons();
     }
 
     public void sortPersonsByBirthYear() {
         familyTree.sortByBirthYear();
-        view.displayMessage("Persons sorted by birth year:");
+        messageView.displayMessage("Persons sorted by birth year:");
         showAllPersons();
     }
 
     public void saveTree(String fileName) {
         try {
             fileOperations.saveToFile(familyTree, fileName);
-            view.displayMessage("Family tree saved to " + fileName);
+            messageView.displayMessage("Family tree saved to " +
+                    fileName);
         } catch (IOException e) {
-            view.displayMessage("Error saving family tree: " +
-                    e.getMessage());
+            messageView.displayMessage("Error saving family tree: "
+                    + e.getMessage());
         }
     }
 
     public void loadTree(String fileName) {
         try {
             familyTree = fileOperations.loadFromFile(fileName);
-            view.displayMessage("Family tree loaded from " +
+            messageView.displayMessage("Family tree loaded from " +
                     fileName);
         } catch (IOException | ClassNotFoundException e) {
-            view.displayMessage("Error loading family tree: " +
-                    e.getMessage());
+            messageView.displayMessage("Error loading family tree: "
+                    + e.getMessage());
         }
     }
 
-    public void handleUserInput() {
-        while (true) {
-            view.displayMessage("Enter command (add, list, sortByName, sortByBirthYear, save, load, exit):");
-            String command = view.getUserInput();
-            switch (command) {
-                case "add":
-                    view.displayMessage("Enter name:");
-                    String name = view.getUserInput();
-                    view.displayMessage("Enter birth year:");
-                    int birthYear = Integer.parseInt(view.getUserInput());
-                    addPerson(name, birthYear);
-                    break;
-                case "list":
-                    showAllPersons();
-                    break;
-                case "sortByName":
-                    sortPersonsByName();
-                    break;
-                case "sortByBirthYear":
-                    sortPersonsByBirthYear();
-                    break;
-                case "save":
-                    view.displayMessage("Enter file name:");
-                    saveTree(view.getUserInput());
-                    break;
-                case "load":
-                    view.displayMessage("Enter file name:");
-                    loadTree(view.getUserInput());
-                    break;
-                case "exit":
-                    return;
-                default:
-                    view.displayMessage("Unknown command");
-            }
+    public void handleCommand(String command) {
+        switch (command) {
+            case "add":
+                messageView.displayMessage("Enter name:");
+                String name = inputView.getUserInput();
+                messageView.displayMessage("Enter birth year:");
+                int birthYear = Integer.parseInt(inputView.getUserInput());
+                addPerson(name, birthYear);
+                break;
+            case "list":
+                showAllPersons();
+                break;
+            case "sortByName":
+                sortPersonsByName();
+                break;
+            case "sortByBirthYear":
+                sortPersonsByBirthYear();
+                break;
+            case "save":
+                messageView.displayMessage("Enter file name:");
+                saveTree(inputView.getUserInput());
+                break;
+            case "load":
+                messageView.displayMessage("Enter file name:");
+                loadTree(inputView.getUserInput());
+                break;
+            case "exit":
+                System.exit(0);
+            default:
+                messageView.displayMessage("Unknown command");
         }
     }
 }
